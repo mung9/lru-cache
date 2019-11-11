@@ -11,10 +11,17 @@ export class LRUCache<TKey, TValue> {
     if (alreadyExistingNode) {
       alreadyExistingNode.value = value;
       this.moveToFront(alreadyExistingNode);
-    } else {
-      if (this.isFull() && this.rear) this.extract(this.rear);
-      this.insertIntoFront(new Node(key, value));
+      return;
     }
+
+    if (this.isFull() && this.rear) {
+      const extractedNode = this.extract(this.rear);
+      this.nodes.delete(extractedNode.key);
+    }
+
+    const newNode = new Node(key, value);
+    this.nodes.set(key, newNode);
+    this.insertIntoFront(newNode);
   }
 
   public get(key: TKey): TValue | undefined {
@@ -30,6 +37,28 @@ export class LRUCache<TKey, TValue> {
 
   public isFull(): boolean {
     return this.nodes.size === this.capacity;
+  }
+
+  public values(): TValue[] {
+    const values: TValue[] = [];
+    let node = this.front;
+    while (node) {
+      values.push(node.value);
+      node = node.next;
+    }
+
+    return values;
+  }
+
+  public keys(): TKey[] {
+    const keys: TKey[] = [];
+    let node = this.front;
+    while (node) {
+      keys.push(node.key);
+      node = node.next;
+    }
+
+    return keys;
   }
 
   private readonly nodes: Map<TKey, Node<TKey, TValue>> = new Map();

@@ -8,8 +8,14 @@
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "ts-node main.ts"
+    "test": "mocha -r ts-node/register main.ts"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/chai": "^4.2.4",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2"
+  }
 }
